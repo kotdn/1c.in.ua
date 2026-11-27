@@ -1,0 +1,286 @@
+// Бекапер — спільний JS сайту (v2)
+// e-mail збирається в браузері, щоб його не знаходили збирачі адрес
+(function(){
+  var e=['denis','samoylenko','ds'].join('.')+'\u0040'+['gmail','com'].join('.');
+  document.querySelectorAll('a.em').forEach(function(a){ a.href='mailto:'+e; a.textContent=e; });
+  document.querySelectorAll('.copy[data-em]').forEach(function(b){ b.setAttribute('data-copy',e); });
+})();
+// форма «Написати нам»: вікно й відправка на адресу з data-endpoint (далі — у Telegram)
+(function(){
+  var d=document.getElementById('fb'); if(!d) return;
+  var f=d.querySelector('form'), send=f.querySelector('[type=submit]'), msg=d.querySelector('.fb-msg');
+  var el=function(id){ return document.getElementById(id); };
+  var local=location.protocol==='file:', t0=0, timer=null, busy=false;
+  function say(text, cls){ msg.className='fb-msg'+(cls?' '+cls:''); msg.textContent=text; }
+  function fail(){
+    msg.className='fb-msg err'; msg.textContent='Не вдалося надіслати. Напишіть у Telegram ';
+    var a=document.createElement('a'); a.href='https://t.me/kot_dn'; a.textContent='@kot_dn'; msg.appendChild(a); msg.appendChild(document.createTextNode('.'));
+  }
+  function open(){
+    if(typeof d.showModal!=='function'){ location.href='https://t.me/kot_dn'; return; }
+    clearTimeout(timer); t0=Date.now(); busy=false;
+    send.disabled=local; send.textContent='Надіслати';
+    if(local) say('Форма працює лише на сайті '+(d.getAttribute('data-domain')||'')+'.','err'); else say('');
+    d.showModal(); document.body.classList.add('fb-on');
+  }
+  function close(){ if(d.open) d.close(); }
+  d.addEventListener('close',function(){ clearTimeout(timer); document.body.classList.remove('fb-on'); });
+  d.addEventListener('click',function(e){ if(e.target===d) close(); });
+  f.querySelector('[data-close]').addEventListener('click',close);
+  document.querySelectorAll('[data-feedback]').forEach(function(b){ b.addEventListener('click',open); });
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(local || busy) return;
+    var m=el('fb-message'), c=el('fb-contact');
+    if(!c.value.trim()){ say('Вкажіть контакт для відповіді: e-mail, телефон або Telegram.','err'); c.focus(); return; }
+    if(!m.value.trim()){ say('Напишіть повідомлення.','err'); m.focus(); return; }
+    busy=true; send.disabled=true; send.textContent='Надсилаю…'; say('');
+    fetch(d.getAttribute('data-endpoint'),{method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({
+      name:el('fb-name').value, contact:el('fb-contact').value, message:m.value,
+      page:location.pathname, website:el('fb-website').value, t:t0 })})
+    .then(function(r){ return r.json().catch(function(){ return null; }).then(function(j){ if(!r.ok || !j || !j.ok){ var er=new Error(); er.msg=j&&j.error; throw er; } }); })
+    .then(function(){ f.reset(); send.textContent='Надіслати'; say('Дякуємо! Повідомлення надіслано.','ok'); timer=setTimeout(close,2000); })
+    .catch(function(er){ busy=false; send.disabled=false; send.textContent='Надіслати'; if(er&&er.msg) say(er.msg,'err'); else fail(); });   // причина від сервера (напр. «Вкажіть контакт…»)
+  });
+})();
+// кнопка «вгору»: з’являється після першого екрана, ховається при відкритому меню
+(function(){
+  var b=document.getElementById('totop'), nav=document.getElementById('site-nav'), tick=false; if(!b||!nav) return;
+  function upd(){ tick=false; var mo=nav.classList.contains('open'); document.body.classList.toggle('menu-on',mo); b.classList.toggle('show', window.scrollY > window.innerHeight*0.9 && !mo); }
+  window.addEventListener('scroll',function(){ if(!tick){ tick=true; requestAnimationFrame(upd); } },{passive:true});
+  new MutationObserver(upd).observe(nav,{attributes:true,attributeFilter:['class']});
+  b.addEventListener('click',function(){ window.scrollTo({top:0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto':'smooth'}); if(location.hash) history.replaceState(null,'',location.pathname+location.search); });
+  upd();
+})();
+// копіювання адреси (працює й без https)
+document.querySelectorAll('.copy').forEach(function(b){
+  b.addEventListener('click',function(){
+    var t=b.getAttribute('data-copy'), ok=false;
+    try{ var ta=document.createElement('textarea'); ta.value=t; ta.setAttribute('readonly',''); ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); ok=document.execCommand('copy'); document.body.removeChild(ta); }catch(e){}
+    if(!ok && navigator.clipboard){ navigator.clipboard.writeText(t); ok=true; }
+    if(b.classList.contains('ico')){
+      var oh=b.innerHTML, ot=b.title;
+      b.innerHTML = ok ? '<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>' : oh;
+      b.classList.toggle('done',ok); b.title = ok ? 'Скопійовано' : 'Виділіть і скопіюйте';
+      setTimeout(function(){ b.innerHTML=oh; b.title=ot; b.classList.remove('done'); },2000);
+    } else {
+      var old=b.textContent; b.textContent=ok?'Скопійовано ✓':'Виділіть і скопіюйте'; setTimeout(function(){ b.textContent=old; },2000);
+    }
+  });
+});
+// скриншот на весь екран по кліку
+(function(){
+  var lb=document.getElementById('lb'); if(!lb) return; var img=lb.querySelector('img'), cap=lb.querySelector('p'), btn=lb.querySelector('button'), last=null;
+  function open(src,alt,text,from){ ['width','height'].forEach(function(k){ var v=from&&from.getAttribute(k); if(v) img.setAttribute(k,v); else img.removeAttribute(k); }); img.src=src; img.alt=alt; cap.textContent=text||''; lb.classList.add('open'); document.body.classList.add('lb-on'); last=from; btn.focus(); }
+  function close(){ lb.classList.remove('open'); document.body.classList.remove('lb-on'); img.removeAttribute('src'); if(last) last.focus(); }
+  document.querySelectorAll('figure.shot:not(.small) img').forEach(function(im){
+    im.setAttribute('tabindex','0'); im.setAttribute('role','button');
+    function go(){ var f=im.closest('figure'); if(f.classList.contains('empty')) return; var c=f.querySelector('figcaption'); open(im.currentSrc||im.src, im.alt, c?c.textContent:'', im); }
+    im.addEventListener('click',go);
+    im.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); } });
+  });
+  lb.addEventListener('click',function(e){ if(e.target!==img || window.innerWidth>640) close(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && lb.classList.contains('open')) close(); });
+})();
+// підписи стовпців для карток-таблиць на телефоні
+(function(){
+  var skip={'Що робить':1,'Що показує':1,'Що означає':1,'Поля':1};
+  document.querySelectorAll('.tbl table').forEach(function(t){
+    var ths=t.querySelectorAll('thead th'); if(!ths.length) return;
+    var names=[].map.call(ths,function(th){return th.textContent.trim();});
+    t.querySelectorAll('tbody tr').forEach(function(tr){
+      [].forEach.call(tr.children,function(td,i){ if(i>0 && names[i] && !skip[names[i]]) td.setAttribute('data-label',names[i]); });
+    });
+  });
+})();
+// бутерброд
+(function(){
+  var btn=document.querySelector('.burger'), nav=document.getElementById('site-nav');
+  function set(open){ nav.classList.toggle('open',open); btn.setAttribute('aria-expanded',open?'true':'false'); btn.setAttribute('aria-label',open?'Закрити меню':'Меню'); }
+  btn.addEventListener('click',function(e){ e.stopPropagation(); set(!nav.classList.contains('open')); });
+  nav.addEventListener('click',function(e){ if(e.target.closest('a')) set(false); });
+  document.addEventListener('click',function(e){ if(nav.classList.contains('open') && !nav.contains(e.target)) set(false); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && nav.classList.contains('open')){ set(false); btn.focus(); } });
+  window.matchMedia('(min-width: 821px)').addEventListener('change',function(m){ if(m.matches) set(false); });
+})();
+// випадні групи меню (клік для сенсорних екранів і клавіатури)
+(function(){
+  var grps=document.querySelectorAll('#site-nav .grp');
+  function closeAll(except){ grps.forEach(function(g){ if(g!==except){ g.classList.remove('open'); g.querySelector('.grp-btn').setAttribute('aria-expanded','false'); } }); }
+  grps.forEach(function(g){
+    var b=g.querySelector('.grp-btn');
+    b.addEventListener('click',function(e){ e.stopPropagation(); var o=!g.classList.contains('open'); closeAll(g); g.classList.toggle('open',o); b.setAttribute('aria-expanded',o?'true':'false'); });
+    g.querySelectorAll('.drop a').forEach(function(a){ a.addEventListener('click',function(){ closeAll(null); a.blur(); }); });
+  });
+  document.addEventListener('click',function(){ closeAll(null); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeAll(null); });
+})();
+
+// ---------- довідка (лише на сторінці з #dovidka) ----------
+if (document.getElementById('dovidka')) {
+// довідка по налаштуваннях: акордеон
+(function(){
+  var body=document.querySelector('#dovidka .help-body'); if(!body) return;
+  var arts=[].slice.call(body.querySelectorAll(':scope > article'));
+  arts.forEach(function(a,i){
+    var h=a.querySelector(':scope > h2'); if(!h) return;
+    var w=document.createElement('div'); w.className='acc-body';
+    while(h.nextSibling) w.appendChild(h.nextSibling);
+    a.appendChild(w);
+    h.setAttribute('role','button'); h.setAttribute('tabindex','0');
+    h.addEventListener('click',function(){
+      if(a.classList.contains('open')){ set(a,false); sync(); return; }
+      var t0=h.getBoundingClientRect().top;
+      only(a);                                            // відкриваємо цей, інші згортаємо
+      var dy=h.getBoundingClientRect().top-t0;            // сторінка не «стрибає»
+      if(dy) window.scrollBy({top:dy, behavior:'instant'});
+    });
+    h.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); h.click(); } });
+    w.addEventListener('beforematch',function(){ only(a); });   // Ctrl+F розгортає пункт
+    set(a, i===0);
+  });
+  function only(a){ arts.forEach(function(x){ set(x, x===a); }); sync(); }
+  function set(a,o){
+    a.classList.toggle('open',o);
+    var w=a.querySelector(':scope > .acc-body'), h=a.querySelector(':scope > h2');
+    if(o) w.removeAttribute('hidden'); else w.setAttribute('hidden','until-found');
+    h.setAttribute('aria-expanded',o?'true':'false');
+  }
+  var bar=document.createElement('div'); bar.className='acc-all';
+  var btn=document.createElement('button'); btn.type='button'; bar.appendChild(btn);
+  body.insertBefore(bar, body.firstChild);
+  function sync(){ document.dispatchEvent(new Event('acc-change')); btn.textContent = arts.every(function(a){return a.classList.contains('open');}) ? 'Згорнути все' : 'Розгорнути все'; }
+  btn.addEventListener('click',function(){ var all=btn.textContent==='Розгорнути все'; arts.forEach(function(a){ set(a,all); }); sync(); });
+  body.classList.add('acc'); sync();
+  // посилання на пункт довідки розгортають його (до того, як спрацює прокрутка)
+  function openFor(id){
+    var t=id && document.getElementById(id); if(!t) return;
+    var a=t.closest('#dovidka .help-body > article'); if(a && !(a.classList.contains('open') && arts.filter(function(x){return x.classList.contains('open');}).length===1)) only(a);
+  }
+  document.addEventListener('click',function(e){
+    var l=e.target.closest && e.target.closest('a[href^="#"]'); if(l) openFor(decodeURIComponent(l.getAttribute('href').slice(1)));
+  },true);
+  window.addEventListener('hashchange',function(){ openFor(decodeURIComponent(location.hash.slice(1))); });
+  if(location.hash) openFor(decodeURIComponent(location.hash.slice(1)));
+})();
+
+// переходи за якорями: скриншоти довантажуються під час прокрутки й зсувають сторінку,
+// тому після прокрутки позиція перевіряється й доводиться до розділу
+(function(){
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches, run=0;
+  function offset(){ return (parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop)||0)+8; }
+  function align(el){
+    if(!/^H[1-4]$/.test(el.tagName)){ var h=el.querySelector('h2,h3'); if(h) el=h; }
+    var my=++run, tries=0, stop=false;
+    function cancel(){ stop=true; }
+    ['wheel','touchstart','keydown'].forEach(function(t){ window.addEventListener(t,cancel,{once:true,passive:true}); });
+    // далекий перехід — одразу, без довгої анімації через десятки скриншотів
+    var far=Math.abs(el.getBoundingClientRect().top) > window.innerHeight*3, smooth=!reduce && !far;
+    el.scrollIntoView({behavior: smooth?'smooth':'instant', block:'start'});
+    function fix(){
+      if(stop || my!==run) return;
+      var d=el.getBoundingClientRect().top-offset();
+      if(Math.abs(d)>3){ window.scrollBy({top:d, behavior:'instant'}); }
+      if(++tries<12) setTimeout(fix,250);
+    }
+    var started=false;
+    function begin(){ if(started) return; started=true; fix(); }
+    if(!smooth){ setTimeout(begin,60); return; }
+    if('onscrollend' in window){ window.addEventListener('scrollend',begin,{once:true}); }
+    setTimeout(begin,1200);
+  }
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a[href^="#"]'); if(!a || e.defaultPrevented) return;
+    var id=decodeURIComponent(a.getAttribute('href').slice(1)); if(!id) return;
+    var el=document.getElementById(id); if(!el) return;
+    e.preventDefault();
+    if(location.hash!=='#'+id) history.pushState(null,'','#'+id);
+    align(el);
+  });
+  window.addEventListener('load',function(){
+    var id=decodeURIComponent(location.hash.slice(1)), el=id && document.getElementById(id);
+    if(el) align(el);
+  });
+})();
+(function(){
+  // бокове меню довідки: відкрите на широкому екрані, згорнуте на телефоні
+  var toc = document.getElementById('toc');
+  var mq = window.matchMedia('(min-width: 901px)');
+  function syncToc(){ toc.open = mq.matches; }
+  syncToc();
+  if (mq.addEventListener) mq.addEventListener('change', syncToc);
+  toc.addEventListener('click', function(e){
+    if (e.target.tagName === 'A' && !mq.matches) toc.open = false;
+  });
+
+  // підсвітка поточного розділу довідки
+  var links = toc.querySelectorAll('a');
+  var map = {};
+  links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  // активний — останній розділ, заголовок якого вже піднявся до верхньої третини екрана
+  var arts=[].slice.call(document.querySelectorAll('.help-body > article')), tk=false;
+  function hl(){
+    tk=false; var cur=null, lim=window.innerHeight*0.33;
+    var open=arts.filter(function(ar){ return ar.classList.contains('open'); });
+    if(open.length===1){ cur=open[0]; }              // акордеон: підсвічуємо відкритий пункт
+    else arts.forEach(function(ar){ var h=ar.querySelector('h2')||ar; if(h.getBoundingClientRect().top<=lim) cur=ar; });
+    var help=document.getElementById('dovidka').getBoundingClientRect();
+    if(help.bottom<0 || help.top>window.innerHeight) cur=null;
+    var act=null;
+    links.forEach(function(a){ var on=!!cur && a===map[cur.id]; a.classList.toggle('on', on); if(on) act=a; });
+    // активний пункт має бути видно в самому боковому меню (воно прокручується окремо)
+    if(act && act!==lastAct && toc.scrollHeight>toc.clientHeight){
+      var tr=toc.getBoundingClientRect(), ar=act.getBoundingClientRect();
+      if(ar.top<tr.top+8 || ar.bottom>tr.bottom-8) toc.scrollTop += (ar.top-tr.top) - toc.clientHeight/2 + ar.height/2;
+    }
+    lastAct=act;
+  }
+  var lastAct=null;
+  document.addEventListener('acc-change',function(){ requestAnimationFrame(hl); });
+  window.addEventListener('scroll',function(){ if(!tk){ tk=true; requestAnimationFrame(hl); } },{passive:true});
+  hl();
+
+})();
+}
+
+// ---------- помилки (лише на сторінці з #pomylky) ----------
+if (document.getElementById('pomylky')) {
+(function(){
+  // помилки: відкривається лише одна група, інші згортаються
+  (function(){
+    var gs = document.querySelectorAll('#pomylky details.grp');
+    gs.forEach(function(d){
+      d.querySelector('summary').addEventListener('click', function(e){
+        if (d.open) return;                      // згортання — як звичайно
+        e.preventDefault();
+        var sm = d.querySelector('summary'), top0 = sm.getBoundingClientRect().top;
+        gs.forEach(function(o){ if (o !== d) o.open = false; });
+        d.open = true;
+        var dy = sm.getBoundingClientRect().top - top0;   // не даємо сторінці «стрибнути»
+        if (dy) window.scrollBy({top: dy, behavior: 'instant'});
+      });
+    });
+  })();
+
+  // пошук по помилках
+  var q = document.getElementById('err-q');
+  var none = document.getElementById('err-none');
+  var groups = document.querySelectorAll('#pomylky details.grp');
+  q.addEventListener('input', function(){
+    var v = q.value.trim().toLowerCase();
+    var total = 0;
+    groups.forEach(function(g){
+      var n = 0;
+      g.querySelectorAll('tbody tr').forEach(function(tr){
+        var hit = !v || tr.textContent.toLowerCase().indexOf(v) !== -1;
+        tr.style.display = hit ? '' : 'none';
+        if (hit) n++;
+      });
+      g.style.display = n ? '' : 'none';
+      if (v && n) g.open = true;
+      total += n;
+    });
+    none.style.display = total ? 'none' : 'block';
+  });
+})();
+}

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<!-- saved from url=(0017)https://1c.in.ua/ -->
+<html lang="uk"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Бекапер — автоматичне резервне копіювання баз 1С і BAS</title>
+<meta name="description" content="Служба Windows для резервного копіювання баз 1С і BAS: вивантаження .dt за розкладом, архів із паролем, NAS, SFTP, Google Drive, звіти в Telegram.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Денис Самойленко">
+<link rel="canonical" href="https://1c.in.ua/">
+<meta name="theme-color" content="#1D5FD1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#10161F" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="uk_UA">
+<meta property="og:site_name" content="Бекапер">
+<meta property="og:title" content="Бекапер — автоматичне резервне копіювання баз 1С і BAS">
+<meta property="og:description" content="Служба Windows для резервного копіювання баз 1С і BAS: вивантаження .dt за розкладом, архів із паролем, NAS, SFTP, Google Drive, звіти в Telegram.">
+<meta property="og:url" content="https://1c.in.ua/">
+<meta property="og:image" content="https://1c.in.ua/assets/img/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Бекапер — автоматичне резервне копіювання баз 1С">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Бекапер — автоматичне резервне копіювання баз 1С і BAS">
+<meta name="twitter:description" content="Служба Windows для резервного копіювання баз 1С і BAS: вивантаження .dt за розкладом, архів із паролем, NAS, SFTP, Google Drive, звіти в Telegram.">
+<meta name="twitter:image" content="https://1c.in.ua/assets/img/og-image.png">
+<link rel="icon" type="image/png" sizes="48x48" href="https://1c.in.ua/assets/img/favicon-48.png">
+<link rel="apple-touch-icon" href="https://1c.in.ua/assets/img/apple-touch-icon.png">
+<link rel="stylesheet" href="./index_files/site.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <button class="burger" type="button" aria-label="Меню" aria-expanded="false" aria-controls="site-nav"><span></span><span></span><span></span></button>
+    <a class="brand" href="https://1c.in.ua/" aria-label="Бекапер — на головну">
+      <img src="./index_files/logo.svg" width="32" height="32" alt="">
+      Бекапер
+    </a>
+    <nav class="nav" id="site-nav" aria-label="Розділи">
+      <div class="grp cur">
+        <button class="grp-btn" type="button" aria-expanded="false">Можливості</button>
+        <div class="drop">
+          <a href="https://1c.in.ua/" aria-current="page">Огляд</a>
+          <a href="https://1c.in.ua/bas/">Бекап BAS</a>
+          <a href="https://1c.in.ua/vidkliuchennia-korystuvachiv/">Відключення користувачів</a>
+          <a href="https://1c.in.ua/skhovyshcha/">Куди зберігати копії</a>
+          <a href="https://1c.in.ua/zakhyst-arkhiviv/">Захист архівів</a>
+          <a href="https://1c.in.ua/zvity/">Звіти</a>
+          <a href="https://1c.in.ua/faily-i-papky/">Файли й папки</a>
+        </div>
+      </div>
+      <div class="grp">
+        <button class="grp-btn" type="button" aria-expanded="false">Встановлення</button>
+        <div class="drop">
+          <a href="https://1c.in.ua/zavantazhennia/">Завантаження</a>
+          <a href="https://1c.in.ua/vstanovlennia/">Встановлення й оновлення</a>
+          <a href="https://1c.in.ua/pershe-zavdannia/">Перше завдання</a>
+        </div>
+      </div>
+      <div class="grp">
+        <button class="grp-btn" type="button" aria-expanded="false">Довідка</button>
+        <div class="drop">
+          <a href="https://1c.in.ua/dovidka/">Довідка</a>
+          <a href="https://1c.in.ua/pomylky/">Помилки</a>
+          <a href="https://1c.in.ua/pytannia/">Питання</a>
+          <a href="https://1c.in.ua/istoriia-zmin/">Історія змін</a>
+        </div>
+      </div>
+      <a class="btn btn-ghost nav-buy" href="https://1c.in.ua/litsenziia/">Купити ліцензію</a>
+      <a class="btn btn-primary nav-dl" href="https://1c.in.ua/download.php?f=backup1c&amp;from=menu" rel="nofollow">Завантажити</a>
+    </nav>
+    <a class="btn btn-ghost" href="https://1c.in.ua/litsenziia/">Купити</a>
+    <a class="btn btn-primary" href="https://1c.in.ua/download.php?f=backup1c&amp;from=header" rel="nofollow">Завантажити</a>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <div>
+
+      <!-- Маніфест: перше, що бачить відвідувач -->
+      <aside class="manifest" aria-label="Коротко про умови">
+        <div class="manifest-price"><b>500 грн</b><span>ліцензія на один сервер</span></div>
+        <ul class="manifest-list">
+          <li><span class="ic-ok">✔</span> Оплата один раз, без підписки</li>
+          <li><span class="ic-ok">✔</span> 30 днів безкоштовно, усі можливості</li>
+          <li><span class="ic-ok">✔</span> Активація без інтернету</li>
+          <li><span class="ic-ok">✔</span> Без телеметрії й автооновлень</li>
+        </ul>
+        <a class="manifest-link" href="https://1c.in.ua/litsenziia/">Як отримати ліцензію →</a>
+      </aside>
+
+      <h1>Резервні копії баз 1С і BAS, про які не треба пам’ятати</h1>
+      <p class="lead">Бекапер — служба Windows на сервері 1С. За розкладом вона вивантажує бази в&nbsp;<code>.dt</code>, пакує їх в архів із паролем, розкладає по ваших сховищах, прибирає старі копії й надсилає звіт у Telegram або на пошту.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="https://1c.in.ua/download.php?f=backup1c&amp;from=home" rel="nofollow">Завантажити MSI</a>
+        <a class="btn btn-ghost" href="https://1c.in.ua/pershe-zavdannia/">Перше завдання за 10 хвилин</a>
+      </div>
+      <p class="meta">Версія 2.0.3 · Windows x64 · українською</p>
+    </div>
+
+    <div class="chat" role="img" aria-label="Приклад звітів Бекапера в Telegram">
+      <div class="chat-head">
+        <div class="chat-ava">B1C</div>
+        <div><b>Звіти Бекапера</b><span>бот у вашому чаті</span></div>
+      </div>
+      <div class="day">сьогодні</div>
+      <div class="msg">
+        <p class="t">✅ Backup1C: Бухгалтерія — нічне вивантаження</p>
+        <p>База: srv-1c\buh<br>Сервер: SRV-1C<br>Файл: <code>buh_2026-11-12_02-00.b1c</code> (1,8 ГБ)<br>Час: 14 хв 32 с<br>Сховища: ✔ NAS офіс, ✔ Google Drive</p>
+        <span class="time">02:14</span>
+      </div>
+      <div class="msg">
+        <p class="t">✅ Backup1C: Документи бухгалтерії</p>
+        <p>Файл: <code>Документи_2026-11-12_03-00.b1c</code> (412 МБ)<br>⚠ пропущено 2 (зайняті/недоступні)<br>Сховища: ✔ Знімний диск</p>
+        <span class="time">03:06</span>
+      </div>
+      <div class="msg">
+        <p class="t">📋 Зведений звіт</p>
+        <p>SRV-1C, 12.11 08:00 – 13.11 08:00<br>Усе гаразд: ✅ 3 з 3</p>
+        <span class="time">08:00</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="facts">
+  <div class="wrap">
+    <ul>
+      <li><b>Служба Windows</b><span>Працює без входу в систему, сама перезапускається після збою</span></li>
+      <li><b>Вивантаження .dt</b><span>Через Конфігуратор, з безпечним відключенням користувачів</span></li>
+      <li><b>Шість типів сховищ</b><span>Папка / NAS, знімний диск, FTP, SFTP, Google Drive, Dropbox</span></li>
+      <li><b>AES-256 і .b1c</b><span>Архів із паролем і розширенням, яке пропускають шифрувальники</span></li>
+    </ul>
+  </div>
+</div>
+
+<section class="block" id="dlia-koho">
+  <div class="wrap">
+    <h2>Для кого Бекапер</h2>
+    <p class="intro">Для адміністраторів і фахівців 1С, які обслуговують сервери малого й середнього бізнесу. Бекапер підходить для серверних і файлових баз будь-якої конфігурації на платформі 8.3.</p>
+
+    <div class="works-with">
+      <span>BAS Бухгалтерія</span><span>BAS ERP</span><span>BAS КУП</span><span>BAS УТП</span>
+      <span>Управління торгівлею</span><span>Бухгалтерія для України</span><span>Власні конфігурації</span>
+    </div>
+    <p><a href="https://1c.in.ua/bas/">Як Бекапер працює з базами BAS →</a></p>
+  </div>
+</section>
+
+<section class="block alt" id="shcho-robyt">
+  <div class="wrap">
+    <h2>Що Бекапер бере на себе</h2>
+    <p class="intro">Кожна з цих проблем рано чи пізно трапляється з нічним бекапом, зробленим «на коліні».</p>
+
+    <dl class="pairs">
+      <dt>Уночі в базі хтось залишився — вивантаження не проходить</dt>
+      <dd>Перед вивантаженням база блокується, сеанси завершуються: штатно через БСП або через кластер. Після вивантаження блокування знімається завжди, навіть якщо сталася помилка. <a href="https://1c.in.ua/vidkliuchennia-korystuvachiv/">Як це працює →</a></dd>
+
+      <dt>Шифрувальник псує й бекапи</dt>
+      <dd>Архів із паролем AES-256 отримує нестандартне розширення <code>.b1c</code>, а копії розходяться по кількох сховищах, зокрема поза офісом. <a href="https://1c.in.ua/zakhyst-arkhiviv/">Захист архівів →</a></dd>
+
+      <dt>Копія «начебто є», а насправді пошкоджена</dt>
+      <dd>Архів спершу пишеться як <code>.part</code>, перевіряється за CRC і лише потім отримує справжнє ім’я. Розмір копії в кожному сховищі, крім FTP, звіряється з оригіналом.</dd>
+
+      <dt>Бекап не працює тиждень, а ніхто не знає</dt>
+      <dd>Звіт після кожного запуску в Telegram і/або на пошту, зведений звіт зранку, позначка пропущених запусків. <a href="https://1c.in.ua/zvity/">Звіти →</a></dd>
+
+      <dt>Диски переповнюються</dt>
+      <dd>Для папки архівів і для кожного сховища окремо задається, скільки останніх копій зберігати. Видаляються лише файли цього завдання. <a href="https://1c.in.ua/skhovyshcha/">Сховища →</a></dd>
+
+      <dt>Невідомо, що програма надсилає в інтернет</dt>
+      <dd>Перелік дозволених адрес вшитий у код: лише Telegram, Google і Dropbox. Паролі й токени зашифровані ключем цього комп’ютера. Телеметрії, автооновлення й онлайн-активації немає.</dd>
+    </dl>
+  </div>
+</section>
+
+<section class="block" id="mozhlyvosti">
+  <div class="wrap">
+    <h2>Можливості</h2>
+    <div class="cards">
+      <a class="card" href="https://1c.in.ua/vidkliuchennia-korystuvachiv/">
+        <b>Відключення користувачів</b>
+        <span>Штатно через БСП або через кластер, із поверненням блокування після вивантаження.</span>
+      </a>
+      <a class="card" href="https://1c.in.ua/skhovyshcha/">
+        <b>Куди зберігати копії</b>
+        <span>Папка / NAS, знімний диск, FTP, SFTP, Google Drive, Dropbox — кілька одночасно.</span>
+      </a>
+      <a class="card" href="https://1c.in.ua/zakhyst-arkhiviv/">
+        <b>Захист архівів</b>
+        <span>ZIP із паролем AES-256, власне розширення, перевірка цілісності.</span>
+      </a>
+      <a class="card" href="https://1c.in.ua/zvity/">
+        <b>Звіти</b>
+        <span>Telegram і пошта після кожного запуску, зведений звіт за розкладом.</span>
+      </a>
+      <a class="card" href="https://1c.in.ua/faily-i-papky/">
+        <b>Файли й папки</b>
+        <span>Окремий тип завдання: будь-які папки в архів із паролем, з масками файлів.</span>
+      </a>
+      <a class="card" href="https://1c.in.ua/bas/">
+        <b>Бекап BAS</b>
+        <span>BAS Бухгалтерія, BAS ERP, BAS КУП та інші конфігурації на платформі 8.3.</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="block alt" id="yak-pratsiuie">
+  <div class="wrap">
+    <h2>Як проходить один запуск</h2>
+    <p class="intro">Завдання виконуються суворо по одному. Ось що відбувається під час резервного копіювання бази.</p>
+    <div class="cols flow">
+      <ol class="steps">
+        <li><b>Перевірка ліцензії</b>Після пробного періоду без ліцензії копії не створюються.</li>
+        <li><b>Підготовка</b>Перевіряється наявність <code>1cv8.exe</code>, створюється папка архівів, прибираються залишки перерваних запусків.</li>
+        <li><b>Відключення користувачів</b>Якщо ввімкнено: база блокується, сеанси завершуються.</li>
+        <li><b>Вивантаження .dt</b>Конфігуратор вивантажує базу. Ліміт часу — 6 годин.</li>
+        <li><b>Зняття блокування</b>Завжди, навіть після помилки. Є кілька запасних способів.</li>
+      </ol>
+      <ol class="steps" start="6" style="counter-reset:s 5">
+        <li><b>Архів</b>Пакування в ZIP з паролем AES-256, перевірка CRC, перейменування з <code>.part</code>.</li>
+        <li><b>Сховища</b>Копія надсилається в усі ввімкнені сховища, у кожному видаляються зайві старі копії.</li>
+        <li><b>Прибирання</b>У папці архівів залишається задана кількість копій.</li>
+        <li><b>Звіт</b>Запис в історію й журнал, повідомлення в Telegram і/або на пошту.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="start">
+  <div class="wrap">
+    <h2>Почати за 10 хвилин</h2>
+    <ol class="steps">
+      <li><b>Встановіть MSI</b>На сервер 1С, від імені адміністратора. Служба встановиться й запуститься сама. <a href="https://1c.in.ua/vstanovlennia/">Встановлення →</a></li>
+      <li><b>Перевірте систему</b>Монітор сам відкриє «Перевірку системи»: платформа 1С, COM-з’єднувач, служба, папки. Біля кожної проблеми — кнопка виправлення.</li>
+      <li><b>Створіть завдання</b>Виберіть базу зі списку, вкажіть сховища, розклад і Telegram для звітів. <a href="https://1c.in.ua/pershe-zavdannia/">Покроково →</a></li>
+    </ol>
+    <div class="actions">
+      <a class="btn btn-primary" href="https://1c.in.ua/download.php?f=backup1c&amp;from=home-start" rel="nofollow">Завантажити MSI</a>
+    </div>
+    <p><a href="https://1c.in.ua/pytannia/">Відповіді на часті питання →</a></p>
+  </div>
+</section>
+
+</main>
+
+<button type="button" class="fab fab-tg" data-feedback="" aria-label="Написати нам" title="Написати нам"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.2l16.4-6.6c.8-.3 1.5.2 1.2 1.4l-2.8 13.1c-.2.9-.8 1.1-1.5.7l-4.2-3.1-2 2c-.2.2-.4.4-.9.4l.3-4.3 7.8-7.1c.3-.3-.1-.5-.5-.2l-9.7 6.1-4.2-1.3c-.9-.3-.9-.9.2-1.3z" fill="currentColor"></path></svg><span class="tip">Написати нам</span></button>
+<button class="fab totop" id="totop" type="button" aria-label="Вгору"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 12.5l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Скриншот">
+  <button type="button" aria-label="Закрити">×</button>
+  <img alt="">
+  <p></p>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-row">
+      <div class="foot-main">
+        <p class="foot-name"><b>Бекапер (Backup1C)</b> <span class="foot-ver">2.0.3</span></p>
+        <nav class="foot-links" aria-label="Інформація">
+          <a href="https://1c.in.ua/litsenziia/">Ліцензія й ціни</a>
+          <a href="https://1c.in.ua/polityka-konfidentsiinosti/">Політика конфіденційності</a>
+          <a href="https://1c.in.ua/istoriia-zmin/">Історія змін</a>
+        </nav>
+      </div>
+      <div class="foot-contacts">
+        <button type="button" class="foot-ic" data-feedback="" aria-label="Написати нам" title="Написати нам"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3.5 6.5l8.5 6.5 8.5-6.5"></path></svg></button>
+        <a class="foot-ic" href="https://t.me/kot_dn" aria-label="Telegram" title="Telegram"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.2l16.4-6.6c.8-.3 1.5.2 1.2 1.4l-2.8 13.1c-.2.9-.8 1.1-1.5.7l-4.2-3.1-2 2c-.2.2-.4.4-.9.4l.3-4.3 7.8-7.1c.3-.3-.1-.5-.5-.2l-9.7 6.1-4.2-1.3c-.9-.3-.9-.9.2-1.3z" fill="currentColor"></path></svg></a>
+      </div>
+    </div>
+    <p class="foot-privacy">Сайт не використовує cookies і сторонню аналітику. Для статистики фіксуються лише факт завантаження програми, IP-адреса та браузер. Повідомлення з форми «Написати нам» надходять розробнику в Telegram і нікуди не передаються.</p>
+  </div>
+</footer>
+
+<dialog class="fb" id="fb" aria-labelledby="fb-title" data-endpoint="/feedback.php" data-domain="1c.in.ua">
+  <form method="dialog" novalidate="">
+    <h2 id="fb-title">Написати нам</h2>
+    <label>Ім’я<input id="fb-name" name="name" type="text" maxlength="80" autocomplete="name"></label>
+    <label>Контакт (e-mail, телефон або Telegram)<input id="fb-contact" name="contact" type="text" maxlength="120" autocomplete="email" required=""></label>
+    <label>Повідомлення<textarea id="fb-message" name="message" maxlength="2000" required=""></textarea></label>
+    <div class="hp" aria-hidden="true"><label>Website<input id="fb-website" name="website" type="text" tabindex="-1" autocomplete="off"></label></div>
+    <div class="fb-actions">
+      <button type="button" class="btn btn-ghost" data-close="">Скасувати</button>
+      <button type="submit" class="btn btn-primary">Надіслати</button>
+    </div>
+    <p class="fb-msg" role="status" aria-live="polite"></p>
+    <p class="fb-note">Повідомлення надійде розробнику в Telegram. Контакт потрібен лише для відповіді.</p>
+  </form>
+</dialog>
+
+<script src="./index_files/site.js.Без названия"></script>
+
+
+</body></html>
